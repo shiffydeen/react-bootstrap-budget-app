@@ -16,7 +16,7 @@ function App() {
   const [localStorageBudgets, setLocalStorageBudgets] = useState(JSON.parse(localStorage.getItem('budgets')) || []);
   const [localStorageExpenses, setlocalStorageExpenses] = useState(JSON.parse(localStorage.getItem('expenses')) || [])
 
-  console.log(localStorageBudgets)
+  // console.log(localStorageBudgets)
 
   // console.log(localStorageBudgets)
   // console.log(localStorageExpenses)
@@ -33,14 +33,16 @@ function App() {
   const [showAddBudgetModal, setshowAddBudgetModal] = useState(false);
   const [showAddExpenseModal, setshowAddExpenseModal] = useState(false);
   const [showViewExpensesModal, setShowViewExpensesModal] = useState(false);
+  const [expenseName, setExpenseName] = useState("");
 
   const [addExpenseBudgetId, setaddExpenseBudgetId] = useState();
   
 
-  const viewExpensesModal = (budgetId) => {
-    const newExpenses = expenses.filter(expense => expense.budgetId === budgetId)
+  const viewExpensesModal = (budgetId, name) => {
+    const newExpenses = localStorageExpenses.filter(expense => expense.budgetId === budgetId)
     setExpenseArr(newExpenses)
     setShowViewExpensesModal(true)
+    setExpenseName(name)
     // console.log(newExpenses)
   }
   // console.log(budgets)
@@ -48,6 +50,7 @@ function App() {
   const addExpenseModal = (budgetId) => {
     setshowAddExpenseModal(true);
     setaddExpenseBudgetId(budgetId)
+    // console.log(budgetId)
   }
 
   const addNewExpense = (item) => {
@@ -59,6 +62,12 @@ function App() {
     // console.log(item)
     setLocalStorageBudgets((prev) => [...prev, item])
     // console.log(localStorageBudgets)
+  }
+
+  const deleteBudget = (id) => {
+    const newBudgets = localStorageBudgets.filter(budget => budget.id !== id)
+    console.log(newBudgets)
+    setLocalStorageBudgets(newBudgets)
   }
 
   useEffect(() => {
@@ -100,7 +109,7 @@ function App() {
 
         <AddExpenseModal show={showAddExpenseModal}  closeModal={() => setshowAddExpenseModal(false)} budgetId={addExpenseBudgetId} addNewExpense={addNewExpense} localStorageBudgets={localStorageBudgets}/>
 
-        <ViewExpensesModal expenses={expenseArr} show={showViewExpensesModal} closeModal={() => setShowViewExpensesModal(false)}/>
+        <ViewExpensesModal expenses={expenseArr} show={showViewExpensesModal} closeModal={() => setShowViewExpensesModal(false)} expenseName={expenseName} deleteBudget={deleteBudget}/>
       </Container>
     </>
   )

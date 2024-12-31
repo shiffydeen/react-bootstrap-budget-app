@@ -1,14 +1,19 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Button, Modal, Stack } from 'react-bootstrap'
 
-const ViewExpensesModal = ({closeModal, show, expenses}) => {
+const ViewExpensesModal = ({closeModal, show, expenses, expenseName, deleteBudget}) => {
+
+    
+
   return (
+
+    
     <Modal show={show} onHide={closeModal}> 
         
             <Modal.Header closeButton>
                 <div className='d-flex align-items-center gap-2'>
-                    <Modal.Title>Expenses - {expenses[0].budgetId}</Modal.Title>
-                    <Button variant='outline-danger'>Delete</Button>
+                    <Modal.Title>Expenses - {expenseName}</Modal.Title>
+                    <Button variant='outline-danger' onClick={() => deleteBudget(id)}>Delete</Button>
                 </div>
             </Modal.Header>
             <Modal.Body>
