@@ -7,6 +7,8 @@ import AddExpenseModal from './components/AddExpenseModal';
 import ViewExpensesModal from './components/ViewExpensesModal';
 import BudgetCard from './components/BudgetCard';
 import BudgetContext from './contexts/BudgetContext';
+import UncategorizedBudget from './components/UncategorizedBudget';
+import TotalBudgetCard from './components/TotalBudgetCard';
 
 
 function App() {
@@ -42,7 +44,6 @@ function App() {
   
 
   const viewExpensesModal = (budgetId, name) => {
-    
     setAddExpenseBudgetId(budgetId)
     setShowViewExpensesModal(true)
     setExpenseName(name)
@@ -84,9 +85,11 @@ function App() {
         <div className='card-grids'>
           {localStorageBudgets.map((budget, index) => {
             return (
-              <BudgetCard key={index} {...budget} viewExpensesModal={viewExpensesModal} addExpenseModal={addExpenseModal} localStorageExpenses={localStorageExpenses}/>
+              <BudgetCard key={index} {...budget} viewExpensesModal={viewExpensesModal} addExpenseModal={addExpenseModal} />
             )
           })}
+          <UncategorizedBudget viewExpensesModal={viewExpensesModal} addExpenseModal={addExpenseModal}/>
+          <TotalBudgetCard />
           <Card>
             <CardBody>
               <Card.Title className='d-flex justify-content-between fw-normal'>

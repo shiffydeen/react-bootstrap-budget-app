@@ -1,6 +1,8 @@
 import React, { useContext, useRef } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
-import BudgetContext from '../contexts/BudgetContext';
+import BudgetContext, { uncategorizedBudgetId } from '../contexts/BudgetContext';
+
+
 
 const AddExpenseModal = ({show, closeModal, budgetId}) => {
 
@@ -40,6 +42,7 @@ const AddExpenseModal = ({show, closeModal, budgetId}) => {
                 <Form.Group className="mb-3" controlId="max">
                     <Form.Label>Budget</Form.Label>
                     <Form.Select ref={budgetIdRef} defaultValue={budgetId}>
+                        <option id={uncategorizedBudgetId}>Uncategorized</option>
                         {localStorageBudgets.map((budget) => {
                             return (
                                 <option key={budget.id} value={budget.id}>{budget.name}</option>

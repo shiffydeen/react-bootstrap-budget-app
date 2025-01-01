@@ -3,6 +3,8 @@ import React, { createContext, useEffect, useState } from 'react'
 
 export const BudgetContext = createContext()
 
+export const uncategorizedBudgetId = "Uncategorized"
+
 
 export const BudgetProvider = ({children}) => {
 
