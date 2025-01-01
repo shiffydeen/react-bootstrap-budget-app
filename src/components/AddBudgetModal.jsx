@@ -1,8 +1,11 @@
-import React, { useRef } from 'react'
+import React, { useContext, useRef } from 'react'
 import { v4 as uuidV4 } from "uuid";
 import { Button, Form, Modal } from 'react-bootstrap'
+import BudgetContext from '../contexts/BudgetContext';
 
-const AddBudgetModal = ({show, closeModal, addNewBudget}) => {
+const AddBudgetModal = ({show, closeModal}) => {
+
+    const {addNewBudget} = useContext(BudgetContext)
 
     const budgetName = useRef();
     const limitAmount = useRef();

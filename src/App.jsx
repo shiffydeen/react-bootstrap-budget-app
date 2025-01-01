@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 import { budgets, expenses } from './data';
 import { Button, Card, CardBody, Container, ProgressBar, Stack } from 'react-bootstrap';
@@ -6,15 +6,18 @@ import AddBudgetModal from './components/AddBudgetModal';
 import AddExpenseModal from './components/AddExpenseModal';
 import ViewExpensesModal from './components/ViewExpensesModal';
 import BudgetCard from './components/BudgetCard';
+import BudgetContext from './contexts/BudgetContext';
 
 
 function App() {
 
+  const {localStorageBudgets, localStorageExpenses} = useContext(BudgetContext)
+
   // const localStorageBudgets = localStorage.getItem('budgets') || [];
   // const localStorageExpenses = localStorage.getItem('expenses') || [];
 
-  const [localStorageBudgets, setLocalStorageBudgets] = useState(JSON.parse(localStorage.getItem('budgets')) || []);
-  const [localStorageExpenses, setlocalStorageExpenses] = useState(JSON.parse(localStorage.getItem('expenses')) || [])
+  // const [localStorageBudgets, setLocalStorageBudgets] = useState(JSON.parse(localStorage.getItem('budgets')) || []);
+  // const [localStorageExpenses, setlocalStorageExpenses] = useState(JSON.parse(localStorage.getItem('expenses')) || [])
 
   // console.log(localStorageBudgets)
 
@@ -28,19 +31,19 @@ function App() {
   // console.log(localStorageBudgets)
   
   const [budgetArr, setBudgetArr] = useState(budgets);
-  const [expenseArr, setExpenseArr] = useState(expenses);
 
-  const [showAddBudgetModal, setshowAddBudgetModal] = useState(false);
-  const [showAddExpenseModal, setshowAddExpenseModal] = useState(false);
+
+  const [showAddBudgetModal, setShowAddBudgetModal] = useState(false);
+  const [showAddExpenseModal, setShowAddExpenseModal] = useState(false);
   const [showViewExpensesModal, setShowViewExpensesModal] = useState(false);
   const [expenseName, setExpenseName] = useState("");
 
-  const [addExpenseBudgetId, setaddExpenseBudgetId] = useState();
+  const [addExpenseBudgetId, setAddExpenseBudgetId] = useState();
   
 
   const viewExpensesModal = (budgetId, name) => {
-    const newExpenses = localStorageExpenses.filter(expense => expense.budgetId === budgetId)
-    setExpenseArr(newExpenses)
+    
+    setAddExpenseBudgetId(budgetId)
     setShowViewExpensesModal(true)
     setExpenseName(name)
     // console.log(newExpenses)
@@ -48,21 +51,21 @@ function App() {
   // console.log(budgets)
 
   const addExpenseModal = (budgetId) => {
-    setshowAddExpenseModal(true);
-    setaddExpenseBudgetId(budgetId)
+    setShowAddExpenseModal(true);
+    setAddExpenseBudgetId(budgetId)
     // console.log(budgetId)
   }
 
-  const addNewExpense = (item) => {
-    // console.log(item)
-    setlocalStorageExpenses((prev) => [...prev, item])
-  }
+  // const addNewExpense = (item) => {
+  //   // console.log(item)
+  //   setLocalStorageExpenses((prev) => [...prev, item])
+  // }
 
-  const addNewBudget = (item) => {
-    // console.log(item)
-    setLocalStorageBudgets((prev) => [...prev, item])
-    // console.log(localStorageBudgets)
-  }
+  // const addNewBudget = (item) => {
+  //   // console.log(item)
+  //   setLocalStorageBudgets((prev) => [...prev, item])
+  //   // console.log(localStorageBudgets)
+  // }
 
   const deleteBudget = (id) => {
     const newBudgets = localStorageBudgets.filter(budget => budget.id !== id)
@@ -70,24 +73,13 @@ function App() {
     setLocalStorageBudgets(newBudgets)
   }
 
-  useEffect(() => {
-    localStorage.setItem('expenses', JSON.stringify(localStorageExpenses))
-  }, [localStorageExpenses]);
-
-  useEffect(() => {
-    localStorage.setItem('budgets', JSON.stringify(localStorageBudgets))
-    // console.log(localStorageBudgets)
-  }, [localStorageBudgets])
-
-
-
   return (
     <>
       <Container className='my-4'>
         <Stack direction='horizontal' gap="2" className='mb-4'>
           <h1 className='me-auto'>Budgets</h1>
-          <Button variant='primary' onClick={() => setshowAddBudgetModal(true)}>Add Budgets</Button>
-          <Button variant='outline-primary' onClick={() => setshowAddExpenseModal(true)}>Add Expenses</Button>
+          <Button variant='primary' onClick={() => setShowAddBudgetModal(true)}>Add Budgets</Button>
+          <Button variant='outline-primary' onClick={() => setShowAddExpenseModal(true)}>Add Expenses</Button>
         </Stack>
         <div className='card-grids'>
           {localStorageBudgets.map((budget, index) => {
@@ -105,11 +97,13 @@ function App() {
             </CardBody>
           </Card>
         </div>
-        <AddBudgetModal show={showAddBudgetModal} closeModal={() => setshowAddBudgetModal(false)} addNewBudget={addNewBudget} />
 
-        <AddExpenseModal show={showAddExpenseModal}  closeModal={() => setshowAddExpenseModal(false)} budgetId={addExpenseBudgetId} addNewExpense={addNewExpense} localStorageBudgets={localStorageBudgets}/>
+        <AddBudgetModal show={showAddBudgetModal} closeModal={() => setShowAddBudgetModal(false)}/>
 
-        <ViewExpensesModal expenses={expenseArr} show={showViewExpensesModal} closeModal={() => setShowViewExpensesModal(false)} expenseName={expenseName} deleteBudget={deleteBudget}/>
+        <AddExpenseModal show={showAddExpenseModal}  closeModal={() => setShowAddExpenseModal(false)} budgetId={addExpenseBudgetId} />
+
+        <ViewExpensesModal show={showViewExpensesModal} closeModal={() => setShowViewExpensesModal(false)} expenseName={expenseName} budgetId={addExpenseBudgetId} deleteBudget={deleteBudget}/>
+
       </Container>
     </>
   )

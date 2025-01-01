@@ -1,7 +1,10 @@
-import React, { useRef } from 'react'
-import { Button, Form, Modal } from 'react-bootstrap'
+import React, { useContext, useRef } from 'react';
+import { Button, Form, Modal } from 'react-bootstrap';
+import BudgetContext from '../contexts/BudgetContext';
 
-const AddExpenseModal = ({show, closeModal, budgetId, addNewExpense, localStorageBudgets}) => {
+const AddExpenseModal = ({show, closeModal, budgetId}) => {
+
+    const {addNewExpense, localStorageBudgets} = useContext(BudgetContext)
 
     const descriptionRef = useRef();
     const amountRef = useRef();

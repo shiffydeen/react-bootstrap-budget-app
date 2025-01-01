@@ -1,13 +1,14 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Button, Modal, Stack } from 'react-bootstrap'
+import BudgetContext from '../contexts/BudgetContext'
 
-const ViewExpensesModal = ({closeModal, show, expenses, expenseName, deleteBudget}) => {
+const ViewExpensesModal = ({closeModal, show, expenseName, budgetId, deleteBudget}) => {
 
-    
+    const {budgetExpenses} = useContext(BudgetContext);
+    const expenses = budgetExpenses(budgetId)
 
   return (
 
-    
     <Modal show={show} onHide={closeModal}> 
         
             <Modal.Header closeButton>
