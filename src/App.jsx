@@ -11,9 +11,11 @@ import UncategorizedBudget from './components/UncategorizedBudget';
 import TotalBudgetCard from './components/TotalBudgetCard';
 
 
+
 function App() {
 
-  const {localStorageBudgets, localStorageExpenses} = useContext(BudgetContext)
+  const {localStorageBudgets, localStorageExpenses, budgetExpenses} = useContext(BudgetContext)
+
 
   // const localStorageBudgets = localStorage.getItem('budgets') || [];
   // const localStorageExpenses = localStorage.getItem('expenses') || [];
@@ -68,47 +70,48 @@ function App() {
   //   // console.log(localStorageBudgets)
   // }
 
-  const deleteBudget = (id) => {
-    const newBudgets = localStorageBudgets.filter(budget => budget.id !== id)
-    console.log(newBudgets)
-    setLocalStorageBudgets(newBudgets)
-  }
+  
 
   return (
-    <>
-      <Container className='my-4'>
+    <main>
+      <Container>
         <Stack direction='horizontal' gap="2" className='mb-4'>
           <h1 className='me-auto'>Budgets</h1>
           <Button variant='primary' onClick={() => setShowAddBudgetModal(true)}>Add Budgets</Button>
-          <Button variant='outline-primary' onClick={() => setShowAddExpenseModal(true)}>Add Expenses</Button>
+          <Button variant='outline-primary' onClick={addExpenseModal}>Add Expenses</Button>
         </Stack>
         <div className='card-grids'>
           {localStorageBudgets.map((budget, index) => {
+            const totalExpenses = budgetExpenses(budget.id).reduce((acc, expense) => acc + expense.cost, 0);
             return (
-              <BudgetCard key={index} {...budget} viewExpensesModal={viewExpensesModal} addExpenseModal={addExpenseModal} />
+              <BudgetCard key={index} {...budget} viewExpensesModal={viewExpensesModal} addExpenseModal={addExpenseModal} totalExpenses={totalExpenses} />
             )
           })}
-          <UncategorizedBudget viewExpensesModal={viewExpensesModal} addExpenseModal={addExpenseModal}/>
+
+          <UncategorizedBudget 
+          viewExpensesModal={viewExpensesModal} 
+          addExpenseModal={addExpenseModal} />
+          
           <TotalBudgetCard />
-          <Card>
-            <CardBody>
-              <Card.Title className='d-flex justify-content-between fw-normal'>
-                <div>Total</div>
-                <div>$1,250/$5,000</div>
-              </Card.Title>
-              <ProgressBar now={30}/>
-            </CardBody>
-          </Card>
         </div>
 
-        <AddBudgetModal show={showAddBudgetModal} closeModal={() => setShowAddBudgetModal(false)}/>
+        <AddBudgetModal 
+          show={showAddBudgetModal} 
+          closeModal={() => setShowAddBudgetModal(false)}/>
 
-        <AddExpenseModal show={showAddExpenseModal}  closeModal={() => setShowAddExpenseModal(false)} budgetId={addExpenseBudgetId} />
+        <AddExpenseModal 
+          show={showAddExpenseModal}  
+          closeModal={() => setShowAddExpenseModal(false)} 
+          budgetId={addExpenseBudgetId} />
 
-        <ViewExpensesModal show={showViewExpensesModal} closeModal={() => setShowViewExpensesModal(false)} expenseName={expenseName} budgetId={addExpenseBudgetId} deleteBudget={deleteBudget}/>
+        <ViewExpensesModal 
+          show={showViewExpensesModal} 
+          closeModal={() => setShowViewExpensesModal(false)} expenseName={expenseName} 
+          budgetId={addExpenseBudgetId}/>
 
       </Container>
-    </>
+    </main>
+    
   )
 }
 

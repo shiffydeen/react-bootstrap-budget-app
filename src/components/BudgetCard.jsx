@@ -2,11 +2,7 @@ import React, { useContext } from 'react';
 import { Button, Card, CardBody, Container, ProgressBar, Stack } from 'react-bootstrap';
 import BudgetContext from '../contexts/BudgetContext';
 
-const BudgetCard = ({id, name, limit, noButtons, viewExpensesModal, addExpenseModal}) => {
-
-    const {localStorageExpenses, budgetExpenses} = useContext(BudgetContext);
-
-    const totalExpenses = budgetExpenses(id).reduce((acc, expense) => acc + expense.cost, 0);
+const BudgetCard = ({id, name, totalExpenses, limit, noButtons, viewExpensesModal, addExpenseModal}) => {
 
     // console.log(localStorageExpenses)
     // .reduce((acc, expense) => {acc + expense.cost}, 0);

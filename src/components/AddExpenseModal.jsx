@@ -1,5 +1,6 @@
 import React, { useContext, useRef } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
+import { v4 as uuidV4 } from "uuid";
 import BudgetContext, { uncategorizedBudgetId } from '../contexts/BudgetContext';
 
 
@@ -15,13 +16,14 @@ const AddExpenseModal = ({show, closeModal, budgetId}) => {
     function handleSubmit(e) {
         e.preventDefault();
        const newExpense = {
+            id: uuidV4(),
             budgetId: budgetIdRef.current.value,
             name: descriptionRef.current.value,
             cost: Number(amountRef.current.value),
         }
         // console.log(newExpense)
         addNewExpense(newExpense)
-        
+        closeModal()
     }
 
   return (

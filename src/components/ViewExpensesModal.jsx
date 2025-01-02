@@ -1,20 +1,24 @@
 import React, { useContext, useState } from 'react'
 import { Button, Modal, Stack } from 'react-bootstrap'
-import BudgetContext from '../contexts/BudgetContext'
+import {uncategorizedBudgetId, BudgetContext} from '../contexts/BudgetContext'
 
-const ViewExpensesModal = ({closeModal, show, expenseName, budgetId, deleteBudget}) => {
+const ViewExpensesModal = ({closeModal, show, expenseName, budgetId}) => {
 
-    const {budgetExpenses} = useContext(BudgetContext);
-    const expenses = budgetExpenses(budgetId)
+    const {budgetExpenses, deleteBudget, deleteExpense} = useContext(BudgetContext);
+    const expenses = budgetExpenses(budgetId);
+
 
   return (
-
     <Modal show={show} onHide={closeModal}> 
-        
             <Modal.Header closeButton>
                 <div className='d-flex align-items-center gap-2'>
                     <Modal.Title>Expenses - {expenseName}</Modal.Title>
-                    <Button variant='outline-danger' onClick={() => deleteBudget(id)}>Delete</Button>
+                    {budgetId !== uncategorizedBudgetId && (
+                        <Button variant='outline-danger' onClick={() => {
+                            deleteBudget(budgetId)
+                            closeModal()
+                            }}>Delete</Button>
+                    )}
                 </div>
             </Modal.Header>
             <Modal.Body>
@@ -25,7 +29,7 @@ const ViewExpensesModal = ({closeModal, show, expenseName, budgetId, deleteBudge
                         <Stack direction='horizontal' gap="2" className='fs-4' key={id}>
                             <span className='me-auto'>{name}</span>
                             <span>${cost}</span>
-                            <Button variant='outline-danger' size='sm'>&times;</Button>
+                            <Button variant='outline-danger' size='sm' onClick={() => deleteExpense(expense)}>&times;</Button>
                         </Stack>
                     )
                     })}

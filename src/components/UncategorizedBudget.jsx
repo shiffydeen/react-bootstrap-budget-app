@@ -6,13 +6,13 @@ const UncategorizedBudget = (props) => {
 
     const {localStorageExpenses, budgetExpenses} = useContext(BudgetContext);
 
-    const amount = budgetExpenses(uncategorizedBudgetId).reduce((acc, expense) => acc + expense.cost, 0);
+    const totalExpenses = budgetExpenses(uncategorizedBudgetId).reduce((acc, expense) => acc + expense.cost, 0);
 
-    if (amount === 0) return null
+    if (totalExpenses === 0) return null
 
 
   return (
-      <BudgetCard amount={amount} name="Uncategorized" {...props}/>
+      <BudgetCard totalExpenses={totalExpenses} name="Uncategorized" {...props} id={uncategorizedBudgetId} />
   )
 }
 
